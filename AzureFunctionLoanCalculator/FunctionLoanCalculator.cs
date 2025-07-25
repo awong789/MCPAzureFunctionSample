@@ -35,11 +35,13 @@ public class FunctionLoanCalculator
             requestBody = await reader.ReadToEndAsync();
         }
         var loanRequest = System.Text.Json.JsonSerializer.Deserialize<LoanRequest>(requestBody);
-        if (loanRequest == null || loanRequest.Principal <= 0 || loanRequest.AnnualInterestRate <= 0 || loanRequest.NumberOfPayments <= 0)
+        if (loanRequest == null || loanRequest.Principal <= 0 || loanRequest.AnnualInterestRate <= 0 
+            || loanRequest.NumberOfPayments <= 0)
         {
             return new BadRequestObjectResult("Invalid loan request parameters.");
         }
-        decimal monthlyPayment = _loanCalculator.CalculateMonthlyPayment(loanRequest.Principal, loanRequest.AnnualInterestRate, loanRequest.NumberOfPayments);
+        decimal monthlyPayment = _loanCalculator.CalculateMonthlyPayment(loanRequest.Principal, 
+            loanRequest.AnnualInterestRate, loanRequest.NumberOfPayments);
         return new OkObjectResult(new { MonthlyPayment = monthlyPayment });
     }
 }
